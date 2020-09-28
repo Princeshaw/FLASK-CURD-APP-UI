@@ -16,6 +16,21 @@ class Friends(db.Model):
     def __repr__(self):
         return '<Name %r>' % self.id
 
+@app.route('/update/<int:id>',methods=['GET','POST'])
+def update(id):
+   friend_to_update = Friends.query.get_or_404(id)    
+   if request.method=='POST':
+       friend_to_update.name = request.form['name']
+       try:
+           db.session.commit()
+           return redirect('/')
+       except:
+           return "There was some problem update that"
+   else:
+       return render_template('update.html',friend_to_update=friend_to_update)       
+
+
+
 @app.route('/',methods=['GET','POST'])
 def home():
     if request.method=='POST':
